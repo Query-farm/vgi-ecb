@@ -1,0 +1,224 @@
+{
+  "schema_version": 1,
+  "catalog": "ecb",
+  "worker": [
+    ".venv/bin/vgi-ecb-worker"
+  ],
+  "api_base_url": "https://data-api.ecb.europa.eu/service",
+  "key_required": false,
+  "checks": [
+    {
+      "name": "dataset discovery",
+      "sql": "SELECT flow, name FROM ecb.main.datasets(flow := 'EXR')",
+      "rows": [
+        [
+          "EXR",
+          "Exchange rates fixture"
+        ]
+      ]
+    },
+    {
+      "name": "dimension discovery",
+      "sql": "SELECT dimension, position FROM ecb.main.dimensions('EXR') ORDER BY position NULLS LAST",
+      "rows": [
+        [
+          "FREQ",
+          1
+        ],
+        [
+          "CURRENCY",
+          2
+        ],
+        [
+          "CURRENCY_DENOM",
+          3
+        ],
+        [
+          "EXR_TYPE",
+          4
+        ],
+        [
+          "EXR_SUFFIX",
+          5
+        ],
+        [
+          "TIME_PERIOD",
+          null
+        ]
+      ]
+    },
+    {
+      "name": "code list",
+      "sql": "SELECT code FROM ecb.main.codes('CL_CURRENCY') ORDER BY code",
+      "rows": [
+        [
+          "EUR"
+        ],
+        [
+          "JPY"
+        ],
+        [
+          "USD"
+        ]
+      ]
+    },
+    {
+      "name": "series metadata",
+      "sql": "SELECT series_key, unit, unit_multiplier FROM ecb.main.series('EXR', 'D.USD.EUR.SP00.A')",
+      "rows": [
+        [
+          "D.USD.EUR.SP00.A",
+          "USD",
+          0
+        ]
+      ]
+    },
+    {
+      "name": "original values and nulls",
+      "sql": "SELECT period, value_text, observation_status FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A') ORDER BY period",
+      "rows": [
+        [
+          "2024-01-02",
+          "1.10",
+          "A"
+        ],
+        [
+          "2024-01-03",
+          null,
+          "M"
+        ],
+        [
+          "2024-01-04",
+          "1.20",
+          "A"
+        ]
+      ]
+    },
+    {
+      "name": "history",
+      "sql": "SELECT count(*), count(valid_to) FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', include_history := true)",
+      "rows": [
+        [
+          6,
+          3
+        ]
+      ]
+    },
+    {
+      "name": "source dates and limit",
+      "sql": "SELECT period FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-03', last_n := 1)",
+      "rows": [
+        [
+          "2024-01-04"
+        ]
+      ]
+    },
+    {
+      "name": "explicit output cap",
+      "sql": "SELECT count(*) FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', max_rows := 1)",
+      "rows": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "empty selection",
+      "sql": "SELECT count(*) FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2100')",
+      "rows": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "name": "conditional unchanged",
+      "sql": "SELECT count(*) FROM ecb.main.observations('UNCHANGED', 'D.USD.EUR.SP00.A', updated_after := '2024-01-01T00:00:00Z')",
+      "rows": [
+        [
+          0
+        ]
+      ]
+    },
+    {
+      "name": "deletion marker",
+      "sql": "SELECT period, dataset_action FROM ecb.main.observations('DELETE', 'D.USD.EUR.SP00.A')",
+      "rows": [
+        [
+          null,
+          "Delete"
+        ]
+      ]
+    }
+  ],
+  "error_checks": [
+    {
+      "name": "malformed source value",
+      "sql": "SELECT * FROM ecb.main.observations('BADVALUE', 'D.USD.EUR.SP00.A')",
+      "message": "numeric"
+    },
+    {
+      "name": "duplicate observation",
+      "sql": "SELECT * FROM ecb.main.observations('DUPLICATE', 'D.USD.EUR.SP00.A')",
+      "message": "duplicate"
+    },
+    {
+      "name": "unsafe XML",
+      "sql": "SELECT * FROM ecb.main.observations('UNSAFE', 'D.USD.EUR.SP00.A')",
+      "message": "unsafe XML"
+    },
+    {
+      "name": "reversed bounds",
+      "sql": "SELECT * FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2025', end_period := '2024')",
+      "message": "must not be after"
+    }
+  ],
+  "live_checks": [
+    {
+      "name": "live datasets",
+      "sql": "SELECT count(*) > 0 FROM ecb.main.datasets(flow := 'EXR')",
+      "rows": [
+        [
+          true
+        ]
+      ]
+    },
+    {
+      "name": "live dimensions",
+      "sql": "SELECT count(*) > 0 FROM ecb.main.dimensions('EXR')",
+      "rows": [
+        [
+          true
+        ]
+      ]
+    },
+    {
+      "name": "live codes",
+      "sql": "SELECT count(*) > 0 FROM ecb.main.codes('CL_CURRENCY')",
+      "rows": [
+        [
+          true
+        ]
+      ]
+    },
+    {
+      "name": "live series",
+      "sql": "SELECT count(*) FROM ecb.main.series('EXR','D.USD.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-05')",
+      "rows": [
+        [
+          1
+        ]
+      ]
+    },
+    {
+      "name": "live observations",
+      "sql": "SELECT count(*), min(value_text) FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-05', include_history := true)",
+      "rows": [
+        [
+          4,
+          "1.0919"
+        ]
+      ]
+    }
+  ]
+}

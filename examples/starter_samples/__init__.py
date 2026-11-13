@@ -1,0 +1,1 @@
+"""VGI ecb worker package."""

@@ -1,16 +1,24 @@
-# Private graders for the public vgi.agent_test_tasks in the worker's catalog metadata.
-# `vgi-lint lint --ai` runs an agent on each prompt and grades it with check_sql.
-# See https://github.com/Query-farm/vgi-lint-check (VGI920).
-tasks:
-  - name: formal_greeting
-    reference_sql: SELECT starter.main.greet('Grace', 'formal') AS greeting
-  - name: sum_of_squares
-    reference_sql: SELECT sum(squared) AS total FROM starter.main.sequence_table(10)
-  - name: stepped_sequence
-    reference_sql: SELECT n FROM starter.main.sequence_table(4, step := 5) ORDER BY n
-  # Reads the public demo API (https://vgi-starter-api.query-farm.services/v1).
-  - name: items_per_category
-    check_sql: >-
-      SELECT count(*) = 3 AND sum(items) = 25
-      FROM (SELECT category, count(*) AS items
-            FROM starter.main.fetch_items('https://vgi-starter-api.query-farm.services/v1') GROUP BY category)
+{
+  "tasks": [
+    {
+      "name": "datasets",
+      "reference_sql": "SELECT flow, name FROM ecb.main.datasets(flow := 'EXR') ORDER BY flow"
+    },
+    {
+      "name": "dimensions",
+      "reference_sql": "SELECT dimension, position, codelist FROM ecb.main.dimensions('EXR') ORDER BY position NULLS LAST, dimension"
+    },
+    {
+      "name": "codes",
+      "reference_sql": "SELECT code, name FROM ecb.main.codes('CL_CURRENCY') WHERE code IN ('USD','EUR') ORDER BY code"
+    },
+    {
+      "name": "series",
+      "reference_sql": "SELECT series_key, title, unit FROM ecb.main.series('EXR', 'D.USD.EUR.SP00.A') ORDER BY series_key"
+    },
+    {
+      "name": "observations",
+      "reference_sql": "SELECT period, value, unit FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-05') ORDER BY period"
+    }
+  ]
+}

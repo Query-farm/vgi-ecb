@@ -1,0 +1,112 @@
+# Official API contract: discovery, source values, errors and revision semantics.
+require vgi
+
+require-env ECB_WORKER
+
+statement ok
+LOAD json;
+
+statement ok
+ATTACH 'ecb' (TYPE vgi, LOCATION '{ECB_WORKER}');
+
+# dataset discovery
+query TT
+SELECT flow, name FROM ecb.main.datasets(flow := 'EXR');
+----
+EXR	Exchange rates fixture
+
+# dimension discovery
+query TT
+SELECT dimension, position FROM ecb.main.dimensions('EXR') ORDER BY position NULLS LAST;
+----
+FREQ	1
+CURRENCY	2
+CURRENCY_DENOM	3
+EXR_TYPE	4
+EXR_SUFFIX	5
+TIME_PERIOD	NULL
+
+# code list
+query T
+SELECT code FROM ecb.main.codes('CL_CURRENCY') ORDER BY code;
+----
+EUR
+JPY
+USD
+
+# series metadata
+query TTT
+SELECT series_key, unit, unit_multiplier FROM ecb.main.series('EXR', 'D.USD.EUR.SP00.A');
+----
+D.USD.EUR.SP00.A	USD	0
+
+# original values and nulls
+query TTT
+SELECT period, value_text, observation_status FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A') ORDER BY period;
+----
+2024-01-02	1.10	A
+2024-01-03	NULL	M
+2024-01-04	1.20	A
+
+# history
+query TT
+SELECT count(*), count(valid_to) FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', include_history := true);
+----
+6	3
+
+# source dates and limit
+query T
+SELECT period FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-03', last_n := 1);
+----
+2024-01-04
+
+# explicit output cap
+query T
+SELECT count(*) FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', max_rows := 1);
+----
+1
+
+# empty selection
+query T
+SELECT count(*) FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2100');
+----
+0
+
+# conditional unchanged
+query T
+SELECT count(*) FROM ecb.main.observations('UNCHANGED', 'D.USD.EUR.SP00.A', updated_after := '2024-01-01T00:00:00Z');
+----
+0
+
+# deletion marker
+query TT
+SELECT period, dataset_action FROM ecb.main.observations('DELETE', 'D.USD.EUR.SP00.A');
+----
+NULL	Delete
+
+# malformed source value
+statement error
+SELECT * FROM ecb.main.observations('BADVALUE', 'D.USD.EUR.SP00.A');
+----
+numeric
+
+# duplicate observation
+statement error
+SELECT * FROM ecb.main.observations('DUPLICATE', 'D.USD.EUR.SP00.A');
+----
+duplicate
+
+# unsafe XML
+statement error
+SELECT * FROM ecb.main.observations('UNSAFE', 'D.USD.EUR.SP00.A');
+----
+unsafe XML
+
+# reversed bounds
+statement error
+SELECT * FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2025', end_period := '2024');
+----
+must not be after
+
+statement ok
+DETACH ecb;
