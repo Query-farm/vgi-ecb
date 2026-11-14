@@ -1,0 +1,13 @@
+line-length = 120
+target-version = "py313"
+
+[lint]
+select = ["E", "F", "W", "I", "N", "UP", "B", "A", "C4", "SIM", "RUF", "D"]
+ignore = ["D203", "D213", "RUF012"]
+allowed-confusables = ["×"]
+
+[lint.per-file-ignores]
+# JupySQL creates named DataFrames; setup adds this directory before local imports.
+"*.ipynb" = ["E402", "F821", "A004"]
+# IPython's display helper intentionally shares the notebook builtin's name.
+"notebook_support.py" = ["A004"]

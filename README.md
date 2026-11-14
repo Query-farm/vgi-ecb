@@ -3,6 +3,9 @@
 Python VGI worker for European Central Bank statistics. It exposes five typed SQL
 functions with discovery metadata, original source values and HTTP bearer authentication.
 
+See the [executed SQL-first notebook](notebooks/README.md) for discovering exchange-rate
+dimensions, comparing currencies on common dates and testing lookback sensitivity.
+
 ## Run locally
 
 Requires Python 3.13+ and [uv](https://docs.astral.sh/uv/).
