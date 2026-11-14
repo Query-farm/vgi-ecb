@@ -1,0 +1,229 @@
+{
+  "schema_version": 1,
+  "catalogs": {
+    "released": {
+      "path": "coverage/catalog-release.json",
+      "sha256": "b1dcc7925e6b67d6e91235763ad46a989711aa56f441d2953c371291ef5a5ff9",
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T20:44:08.013585+00:00",
+        "catalog_sha256": "b1dcc7925e6b67d6e91235763ad46a989711aa56f441d2953c371291ef5a5ff9",
+        "notes": "Complete actual v0.1.0 functions/tables/views export: all five functions, no exported tables/views. No capability exclusions."
+      }
+    },
+    "current": {
+      "path": "coverage/catalog-current.json",
+      "sha256": "904638e076d24b5ee7acda2be69b590f77e63ffe92aec168cfa769dce74a8009",
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T20:44:08.013585+00:00",
+        "catalog_sha256": "904638e076d24b5ee7acda2be69b590f77e63ffe92aec168cfa769dce74a8009",
+        "notes": "Complete current registrations at3b7b92fbdbb3abf1828d035b69e321ee33ee8cd7. Schema/request/parsing implementations unchanged; current adds OS truststore certificate handling and composed examples. Release executed with verified certifi CA bundle. Current binary not built or run."
+      }
+    }
+  },
+  "notebooks": [
+    {
+      "path": "01_exchange_rate_comparisons.ipynb",
+      "sha256": "722259db1699489a97f261bdb3df92b2f4365fbc7ce18ead4c057110cd1bcd35",
+      "execution": {
+        "path": "coverage/run-01.json",
+        "sha256": "7b50a2a841551ca4c97c953261e8c75c703d8c52ff9bc59021525a445e7693b8"
+      }
+    }
+  ],
+  "examples": [
+    {
+      "object": {
+        "schema": "main",
+        "name": "datasets"
+      },
+      "notebook": "01_exchange_rate_comparisons.ipynb",
+      "sql": [
+        {
+          "cell": "7c790078",
+          "reference": "ecb.main.datasets"
+        }
+      ],
+      "narrative_cells": [
+        "479f7fbf"
+      ],
+      "result_cells": [
+        "7c790078",
+        "3b7acc81"
+      ],
+      "interpretation_cells": [
+        "479f7fbf",
+        "3b7acc81"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T20:44:08.013585+00:00",
+        "notebook_sha256": "722259db1699489a97f261bdb3df92b2f4365fbc7ce18ead4c057110cd1bcd35",
+        "catalog_sha256": [
+          "b1dcc7925e6b67d6e91235763ad46a989711aa56f441d2953c371291ef5a5ff9",
+          "904638e076d24b5ee7acda2be69b590f77e63ffe92aec168cfa769dce74a8009"
+        ],
+        "purpose": "Discover the EXR dataflow and its declared structure before forming exchange-rate keys.",
+        "finding": "The bounded EXR lookup confirms Exchange Rates and ECB_EXR1. The structure discovery drives key and code-label requests rather than relying on guessed position or scale."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "dimensions"
+      },
+      "notebook": "01_exchange_rate_comparisons.ipynb",
+      "sql": [
+        {
+          "cell": "7c790078",
+          "reference": "ecb.main.dimensions"
+        }
+      ],
+      "narrative_cells": [
+        "479f7fbf"
+      ],
+      "result_cells": [
+        "7c790078",
+        "3b7acc81",
+        "9c6eff20"
+      ],
+      "interpretation_cells": [
+        "3b7acc81",
+        "9c6eff20"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T20:44:08.013585+00:00",
+        "notebook_sha256": "722259db1699489a97f261bdb3df92b2f4365fbc7ce18ead4c057110cd1bcd35",
+        "catalog_sha256": [
+          "b1dcc7925e6b67d6e91235763ad46a989711aa56f441d2953c371291ef5a5ff9",
+          "904638e076d24b5ee7acda2be69b590f77e63ffe92aec168cfa769dce74a8009"
+        ],
+        "purpose": "Use declared dimension positions and time-role metadata to compose a valid multi-currency key.",
+        "finding": "TIME_PERIOD is excluded by is_time, not a guessed position. Five non-time dimensions yield daily USD+GBP+JPY per EUR with source-selected type and suffix. Required dimensions and unique positions are checked before data retrieval."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "codes"
+      },
+      "notebook": "01_exchange_rate_comparisons.ipynb",
+      "sql": [
+        {
+          "cell": "a2f1934b",
+          "reference": "ecb.main.codes"
+        }
+      ],
+      "narrative_cells": [
+        "479f7fbf"
+      ],
+      "result_cells": [
+        "a2f1934b",
+        "9c6eff20"
+      ],
+      "interpretation_cells": [
+        "3b7acc81",
+        "9c6eff20"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T20:44:08.013585+00:00",
+        "notebook_sha256": "722259db1699489a97f261bdb3df92b2f4365fbc7ce18ead4c057110cd1bcd35",
+        "catalog_sha256": [
+          "b1dcc7925e6b67d6e91235763ad46a989711aa56f441d2953c371291ef5a5ff9",
+          "904638e076d24b5ee7acda2be69b590f77e63ffe92aec168cfa769dce74a8009"
+        ],
+        "purpose": "Resolve currency, quote-type and suffix labels from the discovered list references.",
+        "finding": "Each list uses its returned agency/version. Currency labels and the SP00/A selections explain the chosen quote rather than guessing semantics from numeric magnitude. The discovered key is then used in series metadata and observations."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "series"
+      },
+      "notebook": "01_exchange_rate_comparisons.ipynb",
+      "sql": [
+        {
+          "cell": "5380de93",
+          "reference": "ecb.main.series"
+        }
+      ],
+      "narrative_cells": [
+        "a816f10a"
+      ],
+      "result_cells": [
+        "75e1a5c5"
+      ],
+      "interpretation_cells": [
+        "a816f10a",
+        "75e1a5c5"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T20:44:08.013585+00:00",
+        "notebook_sha256": "722259db1699489a97f261bdb3df92b2f4365fbc7ce18ead4c057110cd1bcd35",
+        "catalog_sha256": [
+          "b1dcc7925e6b67d6e91235763ad46a989711aa56f441d2953c371291ef5a5ff9",
+          "904638e076d24b5ee7acda2be69b590f77e63ffe92aec168cfa769dce74a8009"
+        ],
+        "purpose": "Confirm requested currencies, daily frequency, dimensions and quotation units before plotting.",
+        "finding": "A left join preserves missing requested series. Successful assertions establish currency numerator, EUR denominator and usable base-ten unit multipliers. Metadata-only calls remain distinct from the independently retrieved observations."
+      }
+    },
+    {
+      "object": {
+        "schema": "main",
+        "name": "observations"
+      },
+      "notebook": "01_exchange_rate_comparisons.ipynb",
+      "sql": [
+        {
+          "cell": "e41c73c4",
+          "reference": "ecb.main.observations"
+        }
+      ],
+      "narrative_cells": [
+        "df98104d",
+        "0eed4605",
+        "6f8d9394",
+        "7014cd79"
+      ],
+      "result_cells": [
+        "5c7163af",
+        "9508c1b7",
+        "8156f083",
+        "25021ac6",
+        "e9c90c90",
+        "caa6eac4",
+        "5aa72086"
+      ],
+      "interpretation_cells": [
+        "9508c1b7",
+        "145de1dd",
+        "5aa72086",
+        "7014cd79"
+      ],
+      "review": {
+        "status": "approved",
+        "reviewer": "Codex /root",
+        "reviewed_at": "2026-11-14T20:44:08.013585+00:00",
+        "notebook_sha256": "722259db1699489a97f261bdb3df92b2f4365fbc7ce18ead4c057110cd1bcd35",
+        "catalog_sha256": [
+          "b1dcc7925e6b67d6e91235763ad46a989711aa56f441d2953c371291ef5a5ff9",
+          "904638e076d24b5ee7acda2be69b590f77e63ffe92aec168cfa769dce74a8009"
+        ],
+        "purpose": "Audit one bounded live response, preserve missing/invalid observations, then compare common-date changes and a shorter lookback.",
+        "finding": "Source date/value/unit/uniqueness checks precede charting. Raw scales are explicitly independent; base100 paths share dates and units. Reciprocal percentage identities are verified. The30day experiment holds the end date fixed and contrasts new starting quotes and coverage; live updates are not mistaken for parameter effects."
+      }
+    }
+  ]
+}

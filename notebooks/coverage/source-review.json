@@ -1,0 +1,9 @@
+{
+  "basis": "All five function registrations and signatures reconciled. Data request construction/parsing/callbacks unchanged except current transport uses OS truststore SSLContext rather than default urllib CA discovery. Current also adds composed examples. Released execution supplies a CA bundle and verifies HTTPS successfully; no disabled verification. Current binary not executed.",
+  "source_ci": 43614392909,
+  "current_revision": "3b7b92fbdbb3abf1828d035b69e321ee33ee8cd7",
+  "released_revision": "v0.1.0",
+  "exact_current_runtime_count": 0,
+  "all_named_capabilities_included": true,
+  "transport_difference": "Current main verifies HTTPS with truststore OS certificates. Released tag uses default urllib verification, supplied with certifi CA bundle by notebook setup."
+}

@@ -1,0 +1,275 @@
+{
+  "query": "SELECT * FROM duckdb_functions() WHERE database_name='ecb' ORDER BY schema_name,function_name",
+  "columns": [
+    "database_name",
+    "database_oid",
+    "schema_name",
+    "function_name",
+    "alias_of",
+    "function_type",
+    "description",
+    "comment",
+    "tags",
+    "return_type",
+    "parameters",
+    "parameter_types",
+    "varargs",
+    "macro_definition",
+    "has_side_effects",
+    "internal",
+    "extension_name",
+    "function_oid",
+    "examples",
+    "stability",
+    "categories"
+  ],
+  "rows": [
+    [
+      "ecb",
+      "22592",
+      "main",
+      "codes",
+      null,
+      "table",
+      "List values, translated labels and optional hierarchy parents from one SDMX code list. Use the agency and version returned by dimensions().",
+      null,
+      {
+        "vgi.category": "api",
+        "vgi.doc_llm": "List values, translated labels and optional hierarchy parents from one SDMX code list. Use the agency and version returned by dimensions(). Returns typed columns code, name, description, parent_code, attributes_json. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.doc_md": "## codes\n\nList values, translated labels and optional hierarchy parents from one SDMX code list. Use the agency and version returned by dimensions(). Returns typed columns code, name, description, parent_code, attributes_json. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.example_queries": "[{\"description\": \"Discover ECB dimension codes\", \"sql\": \"SELECT code, name FROM ecb.main.codes('CL_CURRENCY') WHERE code IN ('USD','EUR') ORDER BY code\"}]",
+        "vgi.keywords": "[\"ecb\", \"economics\", \"time series\", \"codes\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"code\", \"type\": \"VARCHAR\", \"description\": \"Code used as one dimension-key component.\"}, {\"name\": \"name\", \"type\": \"VARCHAR\", \"description\": \"Translated code label.\"}, {\"name\": \"description\", \"type\": \"VARCHAR\", \"description\": \"Translated code description when supplied.\"}, {\"name\": \"parent_code\", \"type\": \"VARCHAR\", \"description\": \"Parent code for hierarchical classifications, if supplied.\"}, {\"name\": \"attributes_json\", \"type\": \"VARCHAR\", \"description\": \"Original code XML attributes.\"}]",
+        "vgi.title": "Discover ECB dimension codes"
+      },
+      null,
+      [
+        "codelist",
+        "version",
+        "max_rows",
+        "language",
+        "agency"
+      ],
+      [
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "VARCHAR",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22596,
+      [
+        "SELECT code, name FROM ecb.main.codes('CL_CURRENCY') WHERE code IN ('USD','EUR') ORDER BY code"
+      ],
+      null,
+      []
+    ],
+    [
+      "ecb",
+      "22592",
+      "main",
+      "datasets",
+      null,
+      "table",
+      "List dataflows and their referenced data structures. Use flow to select one artifact; all lists available dataflows. Discovery does not retrieve observations.",
+      null,
+      {
+        "vgi.category": "api",
+        "vgi.doc_llm": "List dataflows and their referenced data structures. Use flow to select one artifact; all lists available dataflows. Discovery does not retrieve observations. Returns typed columns flow, agency, version, name, description, structure_id, structure_agency, structure_version. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.doc_md": "## datasets\n\nList dataflows and their referenced data structures. Use flow to select one artifact; all lists available dataflows. Discovery does not retrieve observations. Returns typed columns flow, agency, version, name, description, structure_id, structure_agency, structure_version. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.example_queries": "[{\"description\": \"Discover ECB datasets\", \"sql\": \"SELECT flow, name FROM ecb.main.datasets(flow := 'EXR') ORDER BY flow\"}]",
+        "vgi.keywords": "[\"ecb\", \"economics\", \"time series\", \"datasets\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"flow\", \"type\": \"VARCHAR\", \"description\": \"SDMX dataflow identifier.\"}, {\"name\": \"agency\", \"type\": \"VARCHAR\", \"description\": \"Maintaining agency identifier.\"}, {\"name\": \"version\", \"type\": \"VARCHAR\", \"description\": \"Published dataflow version.\"}, {\"name\": \"name\", \"type\": \"VARCHAR\", \"description\": \"Translated dataset name.\"}, {\"name\": \"description\", \"type\": \"VARCHAR\", \"description\": \"Translated dataset description when supplied.\"}, {\"name\": \"structure_id\", \"type\": \"VARCHAR\", \"description\": \"Referenced data structure identifier.\"}, {\"name\": \"structure_agency\", \"type\": \"VARCHAR\", \"description\": \"Maintaining agency of the data structure.\"}, {\"name\": \"structure_version\", \"type\": \"VARCHAR\", \"description\": \"Referenced data structure version.\"}]",
+        "vgi.title": "Discover ECB datasets"
+      },
+      null,
+      [
+        "version",
+        "max_rows",
+        "language",
+        "flow",
+        "agency"
+      ],
+      [
+        "VARCHAR",
+        "BIGINT",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22597,
+      [
+        "SELECT flow, name FROM ecb.main.datasets(flow := 'EXR') ORDER BY flow"
+      ],
+      null,
+      []
+    ],
+    [
+      "ecb",
+      "22592",
+      "main",
+      "dimensions",
+      null,
+      "table",
+      "Return the dataflow's series-key dimensions in their declared positions plus its time dimension. Code-list references supply arguments for codes().",
+      null,
+      {
+        "vgi.category": "api",
+        "vgi.doc_llm": "Return the dataflow's series-key dimensions in their declared positions plus its time dimension. Code-list references supply arguments for codes(). Returns typed columns dimension, position, is_time, codelist, codelist_agency, codelist_version, concept. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.doc_md": "## dimensions\n\nReturn the dataflow's series-key dimensions in their declared positions plus its time dimension. Code-list references supply arguments for codes(). Returns typed columns dimension, position, is_time, codelist, codelist_agency, codelist_version, concept. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.example_queries": "[{\"description\": \"Discover ECB dimensions\", \"sql\": \"SELECT dimension, position, codelist FROM ecb.main.dimensions('EXR') ORDER BY position NULLS LAST, dimension\"}]",
+        "vgi.keywords": "[\"ecb\", \"economics\", \"time series\", \"dimensions\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"dimension\", \"type\": \"VARCHAR\", \"description\": \"Dimension identifier used in SDMX keys.\"}, {\"name\": \"position\", \"type\": \"BIGINT\", \"description\": \"One-based series-key position; the observation dimension may have no position.\"}, {\"name\": \"is_time\", \"type\": \"BOOLEAN\", \"description\": \"Whether this is the time dimension at observation level.\"}, {\"name\": \"codelist\", \"type\": \"VARCHAR\", \"description\": \"Referenced code list, if the dimension has an enumeration.\"}, {\"name\": \"codelist_agency\", \"type\": \"VARCHAR\", \"description\": \"Maintaining agency for the code list.\"}, {\"name\": \"codelist_version\", \"type\": \"VARCHAR\", \"description\": \"Referenced code-list version.\"}, {\"name\": \"concept\", \"type\": \"VARCHAR\", \"description\": \"Referenced statistical concept identifier.\"}]",
+        "vgi.title": "Discover ECB dimensions"
+      },
+      null,
+      [
+        "flow",
+        "version",
+        "max_rows",
+        "agency"
+      ],
+      [
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22598,
+      [
+        "SELECT dimension, position, codelist FROM ecb.main.dimensions('EXR') ORDER BY position NULLS LAST, dimension"
+      ],
+      null,
+      []
+    ],
+    [
+      "ecb",
+      "22592",
+      "main",
+      "observations",
+      null,
+      "table",
+      "Retrieve observations with original periods, values, units and SDMX attributes. include_history preserves source dataset actions and validity intervals; these are not inferred ALFRED-style vintage dates. Deletions without individual observations have a NULL period. Required positional arguments are flow and key; remaining controls are named.",
+      null,
+      {
+        "vgi.category": "api",
+        "vgi.doc_llm": "Retrieve observations with original periods, values, units and SDMX attributes. include_history preserves source dataset actions and validity intervals; these are not inferred ALFRED-style vintage dates. Deletions without individual observations have a NULL period. Required positional arguments are flow and key; remaining controls are named. Returns typed columns flow, series_key, frequency, title, unit, unit_multiplier, dimensions_json, attributes_json, dataset_action, valid_from, valid_to, dataset_attributes_json, period, value, value_text, observation_status. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.doc_md": "## observations\n\nRetrieve observations with original periods, values, units and SDMX attributes. include_history preserves source dataset actions and validity intervals; these are not inferred ALFRED-style vintage dates. Deletions without individual observations have a NULL period. Required positional arguments are flow and key; remaining controls are named. Returns typed columns flow, series_key, frequency, title, unit, unit_multiplier, dimensions_json, attributes_json, dataset_action, valid_from, valid_to, dataset_attributes_json, period, value, value_text, observation_status. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.example_queries": "[{\"description\": \"Read ECB observations\", \"sql\": \"SELECT period, value, unit FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-05') ORDER BY period\"}]",
+        "vgi.keywords": "[\"ecb\", \"economics\", \"time series\", \"observations\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"flow\", \"type\": \"VARCHAR\", \"description\": \"Requested dataflow identifier.\"}, {\"name\": \"series_key\", \"type\": \"VARCHAR\", \"description\": \"Dot-separated source series key; NULL for dataset-wide deletion markers.\"}, {\"name\": \"frequency\", \"type\": \"VARCHAR\", \"description\": \"Source frequency code.\"}, {\"name\": \"title\", \"type\": \"VARCHAR\", \"description\": \"Source series title when supplied.\"}, {\"name\": \"unit\", \"type\": \"VARCHAR\", \"description\": \"Source units, without currency conversion.\"}, {\"name\": \"unit_multiplier\", \"type\": \"BIGINT\", \"description\": \"Source base-ten exponent; values are not rescaled.\"}, {\"name\": \"dimensions_json\", \"type\": \"VARCHAR\", \"description\": \"Complete series dimension IDs and values.\"}, {\"name\": \"attributes_json\", \"type\": \"VARCHAR\", \"description\": \"Effective inherited source attributes.\"}, {\"name\": \"dataset_action\", \"type\": \"VARCHAR\", \"description\": \"Source SDMX action, including Delete markers.\"}, {\"name\": \"valid_from\", \"type\": \"VARCHAR\", \"description\": \"Source dataset validFromDate; not an inferred observation release date.\"}, {\"name\": \"valid_to\", \"type\": \"VARCHAR\", \"description\": \"Source dataset validToDate when supplied.\"}, {\"name\": \"dataset_attributes_json\", \"type\": \"VARCHAR\", \"description\": \"Complete source dataset XML attributes.\"}, {\"name\": \"period\", \"type\": \"VARCHAR\", \"description\": \"Native SDMX period; NULL for a deletion marker without individual observations.\"}, {\"name\": \"value\", \"type\": \"DOUBLE\", \"description\": \"Numeric observation in published units; NULL when unavailable or deleted.\"}, {\"name\": \"value_text\", \"type\": \"VARCHAR\", \"description\": \"Original numeric source text for exact decimal conversion.\"}, {\"name\": \"observation_status\", \"type\": \"VARCHAR\", \"description\": \"Source observation status code when supplied.\"}]",
+        "vgi.title": "Read ECB observations"
+      },
+      null,
+      [
+        "flow",
+        "key",
+        "start_period",
+        "max_rows",
+        "first_n",
+        "last_n",
+        "updated_after",
+        "include_history",
+        "end_period",
+        "version",
+        "agency"
+      ],
+      [
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "BIGINT",
+        "BIGINT",
+        "VARCHAR",
+        "BOOLEAN",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22599,
+      [
+        "SELECT period, value, unit FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-05') ORDER BY period"
+      ],
+      null,
+      []
+    ],
+    [
+      "ecb",
+      "22592",
+      "main",
+      "series",
+      null,
+      "table",
+      "Return matching series dimensions, titles, units and effective metadata using the source nodata mode. Required positional arguments are flow and key; all remaining controls are named arguments.",
+      null,
+      {
+        "vgi.category": "api",
+        "vgi.doc_llm": "Return matching series dimensions, titles, units and effective metadata using the source nodata mode. Required positional arguments are flow and key; all remaining controls are named arguments. Returns typed columns flow, series_key, frequency, title, unit, unit_multiplier, dimensions_json, attributes_json, dataset_action, valid_from, valid_to, dataset_attributes_json. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.doc_md": "## series\n\nReturn matching series dimensions, titles, units and effective metadata using the source nodata mode. Required positional arguments are flow and key; all remaining controls are named arguments. Returns typed columns flow, series_key, frequency, title, unit, unit_multiplier, dimensions_json, attributes_json, dataset_action, valid_from, valid_to, dataset_attributes_json. The public upstream API needs no key. Amounts retain source scales; original source strings remain available in JSON. NULL arguments are rejected. Missing optional response fields return NULL. Upstream errors fail the query; SQL WHERE filters are local.",
+        "vgi.example_queries": "[{\"description\": \"Inspect ECB series\", \"sql\": \"SELECT series_key, title, unit FROM ecb.main.series('EXR', 'D.USD.EUR.SP00.A') ORDER BY series_key\"}]",
+        "vgi.keywords": "[\"ecb\", \"economics\", \"time series\", \"series\"]",
+        "vgi.result_columns_schema": "[{\"name\": \"flow\", \"type\": \"VARCHAR\", \"description\": \"Requested dataflow identifier.\"}, {\"name\": \"series_key\", \"type\": \"VARCHAR\", \"description\": \"Dot-separated source series key; NULL for dataset-wide deletion markers.\"}, {\"name\": \"frequency\", \"type\": \"VARCHAR\", \"description\": \"Source frequency code.\"}, {\"name\": \"title\", \"type\": \"VARCHAR\", \"description\": \"Source series title when supplied.\"}, {\"name\": \"unit\", \"type\": \"VARCHAR\", \"description\": \"Source units, without currency conversion.\"}, {\"name\": \"unit_multiplier\", \"type\": \"BIGINT\", \"description\": \"Source base-ten exponent; values are not rescaled.\"}, {\"name\": \"dimensions_json\", \"type\": \"VARCHAR\", \"description\": \"Complete series dimension IDs and values.\"}, {\"name\": \"attributes_json\", \"type\": \"VARCHAR\", \"description\": \"Effective inherited source attributes.\"}, {\"name\": \"dataset_action\", \"type\": \"VARCHAR\", \"description\": \"Source SDMX action, including Delete markers.\"}, {\"name\": \"valid_from\", \"type\": \"VARCHAR\", \"description\": \"Source dataset validFromDate; not an inferred observation release date.\"}, {\"name\": \"valid_to\", \"type\": \"VARCHAR\", \"description\": \"Source dataset validToDate when supplied.\"}, {\"name\": \"dataset_attributes_json\", \"type\": \"VARCHAR\", \"description\": \"Complete source dataset XML attributes.\"}]",
+        "vgi.title": "Inspect ECB series"
+      },
+      null,
+      [
+        "flow",
+        "key",
+        "start_period",
+        "max_rows",
+        "first_n",
+        "last_n",
+        "updated_after",
+        "include_history",
+        "end_period",
+        "version",
+        "agency"
+      ],
+      [
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR",
+        "BIGINT",
+        "BIGINT",
+        "BIGINT",
+        "VARCHAR",
+        "BOOLEAN",
+        "VARCHAR",
+        "VARCHAR",
+        "VARCHAR"
+      ],
+      null,
+      null,
+      null,
+      true,
+      null,
+      22600,
+      [
+        "SELECT series_key, title, unit FROM ecb.main.series('EXR', 'D.USD.EUR.SP00.A') ORDER BY series_key"
+      ],
+      null,
+      []
+    ]
+  ]
+}

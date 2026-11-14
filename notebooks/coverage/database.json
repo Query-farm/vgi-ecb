@@ -1,0 +1,30 @@
+{
+  "query": "SELECT database_name,comment,tags FROM duckdb_databases() WHERE database_name='ecb'",
+  "columns": [
+    "database_name",
+    "comment",
+    "tags"
+  ],
+  "rows": [
+    [
+      "ecb",
+      "# vgi-ecb\n\nDiscover European Central Bank statistical series and retrieve observations with original periods, units and source metadata. The upstream public data service needs no API key. SQL NULL arguments are rejected; missing source values become NULL. Use function arguments for source filtering; SQL WHERE filters are local. HTTP worker access can require a bearer token.\n\nQueries use bounded HTTP responses and retries. Credentials stay out of continuation state. See README.md for deployment and operational limits.",
+      {
+        "vgi.agent_test_tasks": "[{\"name\": \"datasets\", \"prompt\": \"Using ecb.main.datasets, discover ecb datasets. Use the arguments in this example and return the same columns: SELECT flow, name FROM ecb.main.datasets(flow := 'EXR') ORDER BY flow\"}, {\"name\": \"dimensions\", \"prompt\": \"Using ecb.main.dimensions, discover ecb dimensions. Use the arguments in this example and return the same columns: SELECT dimension, position, codelist FROM ecb.main.dimensions('EXR') ORDER BY position NULLS LAST, dimension\"}, {\"name\": \"codes\", \"prompt\": \"Using ecb.main.codes, discover ecb dimension codes. Use the arguments in this example and return the same columns: SELECT code, name FROM ecb.main.codes('CL_CURRENCY') WHERE code IN ('USD','EUR') ORDER BY code\"}, {\"name\": \"series\", \"prompt\": \"Using ecb.main.series, inspect ecb series. Use the arguments in this example and return the same columns: SELECT series_key, title, unit FROM ecb.main.series('EXR', 'D.USD.EUR.SP00.A') ORDER BY series_key\"}, {\"name\": \"observations\", \"prompt\": \"Using ecb.main.observations, read ecb observations. Use the arguments in this example and return the same columns: SELECT period, value, unit FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-05') ORDER BY period\"}]",
+        "vgi.author": "Query.Farm",
+        "vgi.copyright": "Copyright 2026 Query.Farm contributors",
+        "vgi.doc_llm": "Discover European Central Bank statistical series and retrieve observations with original periods, units and source metadata. The upstream public data service needs no API key. SQL NULL arguments are rejected; missing source values become NULL. Use function arguments for source filtering; SQL WHERE filters are local. HTTP worker access can require a bearer token.",
+        "vgi.doc_md": "# vgi-ecb\n\nDiscover European Central Bank statistical series and retrieve observations with original periods, units and source metadata. The upstream public data service needs no API key. SQL NULL arguments are rejected; missing source values become NULL. Use function arguments for source filtering; SQL WHERE filters are local. HTTP worker access can require a bearer token.\n\nQueries use bounded HTTP responses and retries. Credentials stay out of continuation state. See README.md for deployment and operational limits.",
+        "vgi.executable_examples": "[{\"name\": \"discover_datasets\", \"description\": \"Discover available functions without credentials or API requests\", \"sql\": \"SELECT function_name FROM duckdb_functions() WHERE database_name = 'ecb' AND function_name = 'datasets' ORDER BY function_name\", \"expected_result\": [{\"function_name\": \"datasets\"}]}]",
+        "vgi.icon_url": "https://query.farm/media-kit/products/vgi/vgi-logo.png",
+        "vgi.keywords": "[\"ecb\", \"economics\", \"public data\", \"time series\", \"duckdb\", \"sql\"]",
+        "vgi.license": "0BSD",
+        "vgi.source_url": "https://github.com/Query-farm/vgi-ecb",
+        "vgi.subtitle": "Discover European Central Bank statistical series and retrieve observations with original periods, units and source metadata.",
+        "vgi.support_contact": "https://github.com/Query-farm/vgi-ecb/issues",
+        "vgi.support_policy_url": "https://github.com/Query-farm/vgi-ecb/blob/main/README.md",
+        "vgi.title": "ECB Statistics"
+      }
+    ]
+  ]
+}
