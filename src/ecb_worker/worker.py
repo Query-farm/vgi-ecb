@@ -55,6 +55,18 @@ CATALOG_TAGS["vgi.agent_test_tasks"] = json.dumps(
         }
         for fn in FUNCTIONS
     ]
+    + [
+        {
+            "name": "currency_peaks",
+            "prompt": (
+                "Using the ECB worker, find the highest daily ECB euro reference rate between 2024-01-02 and "
+                "2024-01-31 (inclusive) for the US dollar and the Japanese yen, each labelled with the "
+                "currency's name from the ECB CL_CURRENCY code list. Return exactly the columns currency "
+                "(ISO code, VARCHAR), currency_name (VARCHAR) and max_rate (DOUBLE), one row per currency, "
+                "ordered by currency."
+            ),
+        }
+    ]
 )
 
 

@@ -9,6 +9,7 @@ from typing import Annotated, Any, ClassVar
 import pyarrow as pa
 from vgi.arguments import Arg
 from vgi.invocation import BindResponse
+from vgi.metadata import FunctionExample
 from vgi.table_function import BindParams, OutputCollector, ProcessParams, TableFunctionGenerator, init_single_worker
 from vgi_rpc import ArrowSerializableDataclass
 
@@ -77,6 +78,33 @@ OBSERVATIONS = pa.schema(
         column("value_text", pa.string(), "Original numeric source text for exact decimal conversion."),
         column("observation_status", pa.string(), "Source observation status code when supplied."),
     ]
+)
+
+
+# Composed examples: one function's rows labelled or decoded by another's.
+# Code lists are joined on series-key positions reported by dimensions('EXR').
+CURRENCY_AVERAGES = FunctionExample(
+    description=(
+        "Average monthly ECB euro reference rates for Q1 2024 (USD, GBP, JPY), labelled with each "
+        "currency's name from the CL_CURRENCY code list"
+    ),
+    sql=(
+        "SELECT c.code AS currency, c.name AS currency_name, round(avg(o.value), 4) AS avg_rate_per_eur, "
+        "count(o.value) AS months FROM ecb.main.observations('EXR', 'M.USD+GBP+JPY.EUR.SP00.A', "
+        "start_period := '2024-01', end_period := '2024-03') AS o JOIN ecb.main.codes('CL_CURRENCY') AS c "
+        "ON c.code = split_part(o.series_key, '.', 2) GROUP BY c.code, c.name ORDER BY c.code"
+    ),
+)
+USD_FREQUENCIES = FunctionExample(
+    description=(
+        "Every frequency at which the US dollar/euro reference rate is published, with the frequency "
+        "name decoded from the CL_FREQ code list"
+    ),
+    sql=(
+        "SELECT s.frequency, f.name AS frequency_name, s.series_key FROM ecb.main.series('EXR', "
+        "'.USD.EUR.SP00.A') AS s JOIN ecb.main.codes('CL_FREQ') AS f ON f.code = s.frequency "
+        "ORDER BY s.series_key"
+    ),
 )
 
 
@@ -435,6 +463,7 @@ class Series(EcbFunction[DataArgs]):
         ),
         SERIES,
         "SELECT series_key, title, unit FROM ecb.main.series('EXR', 'D.USD.EUR.SP00.A') ORDER BY series_key",
+        extra_examples=(USD_FREQUENCIES,),
     )
 
     @classmethod
@@ -462,6 +491,7 @@ class Observations(EcbFunction[DataArgs]):
             "SELECT period, value, unit FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', "
             "start_period := '2024-01-02', end_period := '2024-01-05') ORDER BY period"
         ),
+        extra_examples=(CURRENCY_AVERAGES,),
     )
 
     @classmethod

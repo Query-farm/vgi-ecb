@@ -108,5 +108,17 @@ SELECT * FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '
 ----
 must not be after
 
+# composed: observations labelled through the currency code list
+query TTRI
+SELECT c.code AS currency, c.name AS currency_name, round(avg(o.value), 4) AS avg_rate_per_eur, count(o.value) AS months FROM ecb.main.observations('EXR', 'M.USD+GBP+JPY.EUR.SP00.A', start_period := '2024-01', end_period := '2024-03') AS o JOIN ecb.main.codes('CL_CURRENCY') AS c ON c.code = split_part(o.series_key, '.', 2) GROUP BY c.code, c.name ORDER BY c.code;
+----
+USD	US dollar	1.15	2
+
+# composed: series frequencies decoded through CL_FREQ
+query TTT
+SELECT s.frequency, f.name AS frequency_name, s.series_key FROM ecb.main.series('EXR', '.USD.EUR.SP00.A') AS s JOIN ecb.main.codes('CL_FREQ') AS f ON f.code = s.frequency ORDER BY s.series_key;
+----
+D	Daily	D.USD.EUR.SP00.A
+
 statement ok
 DETACH ecb;

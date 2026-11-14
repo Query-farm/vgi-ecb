@@ -19,6 +19,10 @@
     {
       "name": "observations",
       "reference_sql": "SELECT period, value, unit FROM ecb.main.observations('EXR', 'D.USD.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-05') ORDER BY period"
+    },
+    {
+      "name": "currency_peaks",
+      "reference_sql": "SELECT c.code AS currency, c.name AS currency_name, max(o.value) AS max_rate FROM ecb.main.observations('EXR', 'D.USD+JPY.EUR.SP00.A', start_period := '2024-01-02', end_period := '2024-01-31') AS o JOIN ecb.main.codes('CL_CURRENCY') AS c ON c.code = split_part(o.series_key, '.', 2) GROUP BY c.code, c.name ORDER BY c.code"
     }
   ]
 }

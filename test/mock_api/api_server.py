@@ -40,12 +40,15 @@ def metadata() -> bytes:
             {"id": "CL_CURRENCY" if name.startswith("CURRENCY") else "CL_" + name, "agencyID": "ECB", "version": "1.0"},
         )
     add(dimensions, "s:TimeDimension", {"id": "TIME_PERIOD"})
-    codes = add(
-        add(structures, "s:Codelists"), "s:Codelist", {"id": "CL_CURRENCY", "agencyID": "ECB", "version": "1.0"}
-    )
-    for code, title in [("EUR", "Euro"), ("USD", "US dollar"), ("JPY", "Japanese yen")]:
-        node = add(codes, "s:Code", {"id": code})
-        add(node, "c:Name", {"{http://www.w3.org/XML/1998/namespace}lang": "en"}, title)
+    codelists = add(structures, "s:Codelists")
+    for codelist, entries in [
+        ("CL_CURRENCY", [("EUR", "Euro"), ("USD", "US dollar"), ("JPY", "Japanese yen")]),
+        ("CL_FREQ", [("D", "Daily"), ("M", "Monthly")]),
+    ]:
+        codes = add(codelists, "s:Codelist", {"id": codelist, "agencyID": "ECB", "version": "1.0"})
+        for code, title in entries:
+            node = add(codes, "s:Code", {"id": code})
+            add(node, "c:Name", {"{http://www.w3.org/XML/1998/namespace}lang": "en"}, title)
     return bytes(tostring(root, encoding="utf-8", xml_declaration=True))
 
 

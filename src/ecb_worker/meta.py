@@ -114,8 +114,20 @@ CATALOG_TAGS = {
 }
 
 
-def function_meta(name: str, title: str, description: str, schema: pa.Schema, sql: str) -> Any:
-    """Build consistent, discoverable metadata for an authenticated table function."""
+def function_meta(
+    name: str,
+    title: str,
+    description: str,
+    schema: pa.Schema,
+    sql: str,
+    *,
+    extra_examples: tuple[FunctionExample, ...] = (),
+) -> Any:
+    """Build consistent, discoverable metadata for an authenticated table function.
+
+    ``sql`` is the primary single-function example (it also seeds the agent task);
+    ``extra_examples`` follow it, typically queries composing several functions.
+    """
     types = {
         "string": "VARCHAR",
         "int64": "BIGINT",
@@ -167,5 +179,5 @@ def function_meta(name: str, title: str, description: str, schema: pa.Schema, sq
             ]
         ),
     }
-    Meta.examples = [FunctionExample(sql=sql, description=title)]
+    Meta.examples = [FunctionExample(sql=sql, description=title), *extra_examples]
     return Meta

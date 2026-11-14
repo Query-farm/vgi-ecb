@@ -52,6 +52,23 @@ are wildcards; `+` selects alternatives. Named `start_period`/`end_period`,
 requests previous dataset versions when available. `agency` defaults to `ECB`,
 `version` to `latest`, and metadata `language` to `en`.
 
+The functions compose: `codes` decodes the series-key components returned by
+`series` and `observations`. Average Q1 2024 monthly reference rates with each
+currency's name from `CL_CURRENCY` (key position 2 per `dimensions('EXR')`):
+
+```sql
+SELECT c.code AS currency, c.name AS currency_name,
+       round(avg(o.value), 4) AS avg_rate_per_eur, count(o.value) AS months
+FROM ecb.main.observations('EXR', 'M.USD+GBP+JPY.EUR.SP00.A',
+  start_period := '2024-01', end_period := '2024-03') AS o
+JOIN ecb.main.codes('CL_CURRENCY') AS c ON c.code = split_part(o.series_key, '.', 2)
+GROUP BY c.code, c.name
+ORDER BY c.code;
+-- GBP  UK pound sterling    0.8562  3
+-- JPY  Japanese yen       161.2026  3
+-- USD  US dollar            1.0857  3
+```
+
 `valid_from`, `valid_to` and `dataset_action` reproduce source fields. They are not
 invented observation release dates or a guarantee of a complete ALFRED archive.
 A deletion without individual observations has a NULL `period`; a dataset-wide
