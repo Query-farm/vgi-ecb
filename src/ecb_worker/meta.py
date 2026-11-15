@@ -58,6 +58,13 @@ def column(name: str, type_: pa.DataType, comment: str, *, nullable: bool = True
     return pa.field(name, type_, nullable=nullable, metadata={b"comment": comment.encode()})
 
 
+#: The catalog COMMENT: one plain-text sentence directories show as the one-line description.
+CATALOG_COMMENT = (
+    "European Central Bank statistics as SQL tables: exchange rates, interest rates, money, "
+    "prices and other euro-area time series from the ECB Data Portal, with dataflow "
+    "dimensions and code lists. No API key needed."
+)
+
 CATALOG_DOC_LLM = (
     "Discover European Central Bank statistical series and retrieve observations with "
     "original periods, units and source metadata. The upstream public data service needs "

@@ -16,7 +16,7 @@ from vgi.catalog import Catalog, Schema
 from .auth import validate_http_auth
 from .functions import FUNCTIONS
 from .meta import (
-    CATALOG_DOC_MD,
+    CATALOG_COMMENT,
     CATALOG_NAME,
     CATALOG_TAGS,
     SCHEMA_CATEGORIES,
@@ -75,7 +75,7 @@ class EcbWorker(Worker):
 
     catalog = Catalog(
         name=CATALOG_NAME,
-        comment=CATALOG_DOC_MD,
+        comment=CATALOG_COMMENT,
         source_url=SOURCE_URL,
         tags=CATALOG_TAGS,
         schemas=[
