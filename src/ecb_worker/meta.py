@@ -116,13 +116,10 @@ CATALOG_TAGS = {
     "vgi.executable_examples": json.dumps(
         [
             {
-                "name": "discover_datasets",
-                "description": "Discover available functions without credentials or API requests",
-                "sql": (
-                    "SELECT function_name FROM duckdb_functions() WHERE database_name = 'ecb' AND "
-                    "function_name = 'datasets' ORDER BY function_name"
-                ),
-                "expected_result": [{"function_name": "datasets"}],
+                "name": "exchange_rates_dataflow",
+                "description": "Look up the ECB exchange-rates dataflow (EXR) from the keyless ECB Data Portal API",
+                "sql": "SELECT flow, name FROM ecb.main.datasets(flow := 'EXR') ORDER BY flow",
+                "expected_result": [{"flow": "EXR", "name": "Exchange Rates"}],
             }
         ]
     ),

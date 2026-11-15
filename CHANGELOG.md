@@ -7,6 +7,8 @@
   documentation and where to get an API key (VGI183).
 - The `main` schema comment is now a short one-line summary, so the schema's
   `vgi.doc_md` adds detail instead of repeating it (VGI102).
+- The catalog's executable example now calls the worker instead of only
+  querying DuckDB's own catalog (`duckdb_functions()`): `ecb.main.datasets(flow := 'EXR')` looks up the exchange-rates dataflow.
 
 ## 0.1.1 (2026-11-14)
 
